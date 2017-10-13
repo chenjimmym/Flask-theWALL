@@ -65,11 +65,11 @@ def userlogin():
     currentUser = mysql.query_db(loginQuery, userInputData)
     # print currentUser
     if currentUser:
-        flash("Login Successful")
+        # flash("Login Successful")
         session['loginStatus'] = currentUser[0]['id']
         session['loginName'] = currentUser[0]['first_name']
-        print session['loginStatus']
-        print session['loginName']
+        # print session['loginStatus']
+        # print session['loginName']
     else:
         flash("Password Entered Does Not Match Account")
     return redirect('/wall')
@@ -83,8 +83,11 @@ def userlogout():
 def wall():
     getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID FROM users JOIN messages on user_id = users.id;"
     allPosts = mysql.query_db(getPostsQuery)
+    getCommentsQuery = "SELECT * FROM comments"
+    allComments = mysql.query_db(getCommentsQuery)
+    print allComments
     # print allPosts
-    return render_template('wall.html', allPosts = allPosts)
+    return render_template('wall.html', allPosts = allPosts, allComments = allComments)
 
 @app.route('/wallpost', methods=['POST'])
 def wallpost():

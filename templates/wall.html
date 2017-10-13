@@ -20,10 +20,16 @@
     {% for post in allPosts: %}
         <h4>ID:{{ post['id'] }} Name: {{ post['first_name'] }} MsgID: {{ post['msgID'] }}</h4>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comments: </h5>
+        {% for comment in allComments: %}
+            {% if comment['message_id'] == post['msgID'] %}
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['comment'] }}</p>
+            {% endif %}
+        {% endfor %}
         <form action="/postcomment" method="post">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="commentMessage" rows="2" cols="50"></textarea><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="commentMessage" rows="2" cols="50"></textarea><br>
             <input type="hidden" name="msgID" value="{{ post['msgID'] }}">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Post a comment">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Post a comment">
         </form>
     {% endfor %}
 

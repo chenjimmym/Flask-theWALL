@@ -68,8 +68,8 @@ def userlogin():
         flash("Login Successful")
         session['loginStatus'] = currentUser[0]['id']
         session['loginName'] = currentUser[0]['first_name']
-        # print session['loginStatus']
-        # print session['loginName']
+        print session['loginStatus']
+        print session['loginName']
     else:
         flash("Password Entered Does Not Match Account")
     return redirect('/wall')
@@ -81,9 +81,9 @@ def userlogout():
 
 @app.route('/wall')
 def wall():
-    getPostsQuery = "SELECT first_name, message, users.id FROM users JOIN messages on user_id = users.id;"
+    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID FROM users JOIN messages on user_id = users.id;"
     allPosts = mysql.query_db(getPostsQuery)
-    print allPosts
+    # print allPosts
     return render_template('wall.html', allPosts = allPosts)
 
 @app.route('/wallpost', methods=['POST'])
@@ -92,6 +92,15 @@ def wallpost():
     inputMessageData = {'userID': session['loginStatus'],'message':postMessage}
     inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES (:userID, :message, NOW(), NOW());"
     mysql.query_db(inputMessageQuery,inputMessageData)
+    return redirect('/wall')
+
+@app.route('/postcomment', methods=['POST'])
+def postcomment():
+    commentMessage = request.form['commentMessage']
+    messageID = request.form['msgID']
+    commentMessageData = {'postID':messageID, 'userID':session['loginStatus'], 'commentMessage':commentMessage}
+    commentInputQuery = "INSERT INTO `wallFlask`.`comments` (`message_id`, `user_id`, `comment`, `created_at`, `updated_at`) VALUES (:postID, '3', :commentMessage, NOW(), NOW());"
+    mysql.query_db(commentInputQuery,commentMessageData)
     return redirect('/wall')
 
 app.run(debug=True)

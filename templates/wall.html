@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
     </head>
     <body>
-    {% if session['loginStatus'] == True %}
-    <p>Logged in as ID: {{ session['loginStatus'] }} Name: {{ session['loginName'] }}</p>
+    {% if session['loginStatus'] != False %}
+        <p>Logged in as ID: {{ session['loginStatus'] }} Name: {{ session['loginName'] }}</p>
     {% endif %}
     <form action="/logout" method="post">
         <input type="submit" value="Log Out">
@@ -18,8 +18,13 @@
     </form>
 
     {% for post in allPosts: %}
-    <h4>ID:{{ post['id'] }} Name: {{ post['first_name'] }}</h4>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
+        <h4>ID:{{ post['id'] }} Name: {{ post['first_name'] }} MsgID: {{ post['msgID'] }}</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
+        <form action="/postcomment" method="post">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="commentMessage" rows="2" cols="50"></textarea><br>
+            <input type="hidden" name="msgID" value="{{ post['msgID'] }}">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Post a comment">
+        </form>
     {% endfor %}
 
 

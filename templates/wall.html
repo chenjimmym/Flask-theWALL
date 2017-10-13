@@ -11,18 +11,19 @@
     <form action="/logout" method="post">
         <input type="submit" value="Log Out">
     </form> 
-    <h1>The Coolest Wall: Welcome ---name--- </h1>
+    <h1>The Coolest Wall:</h1>
     <form action="/wallpost" method="post">
         <textarea name="postMessage" rows="10" cols="100"></textarea><br>
         <input type="submit" value="Post a message">
     </form>
 
     {% for post in allPosts: %}
-        <h4>ID:{{ post['id'] }} Name: {{ post['first_name'] }} MsgID: {{ post['msgID'] }}</h4>
+        <h3>{{ post['first_name'] }} on {{ post['created_at'] }}</h3>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
         <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comments: </h5>
         {% for comment in allComments: %}
             {% if comment['message_id'] == post['msgID'] %}
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['first_name'] }} on {{ comment['created_at'] }}</h5>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['comment'] }}</p>
             {% endif %}
         {% endfor %}

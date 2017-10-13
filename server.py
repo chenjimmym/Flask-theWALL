@@ -81,12 +81,13 @@ def userlogout():
 
 @app.route('/wall')
 def wall():
-    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID FROM users JOIN messages on user_id = users.id;"
+    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID, messages.created_at FROM users JOIN messages on user_id = users.id;"
     allPosts = mysql.query_db(getPostsQuery)
-    getCommentsQuery = "SELECT * FROM comments"
+    # getCommentsQuery = "SELECT * FROM comments"
+    getCommentsQuery = "SELECT message_id, user_id, comment, first_name, comments.created_at FROM users JOIN comments ON user_id = users.id;"
     allComments = mysql.query_db(getCommentsQuery)
-    print allComments
-    # print allPosts
+    # print allComments
+    print allPosts
     return render_template('wall.html', allPosts = allPosts, allComments = allComments)
 
 @app.route('/wallpost', methods=['POST'])

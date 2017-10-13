@@ -72,6 +72,7 @@ def userlogin():
         # print session['loginName']
     else:
         flash("Password Entered Does Not Match Account")
+        return redirect('/')
     return redirect('/wall')
 
 @app.route('/logout', methods=['POST'])
@@ -84,7 +85,7 @@ def wall():
     getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID, messages.created_at FROM users JOIN messages on user_id = users.id;"
     allPosts = mysql.query_db(getPostsQuery)
     # getCommentsQuery = "SELECT * FROM comments"
-    getCommentsQuery = "SELECT message_id, user_id, comment, first_name, comments.created_at FROM users JOIN comments ON user_id = users.id;"
+    getCommentsQuery = "SELECT message_id, user_id, comment, first_name, comments.created_at FROM users JOIN comments ON user_id = users.id ORDER BY comments.created_at;"
     allComments = mysql.query_db(getCommentsQuery)
     # print allComments
     print allPosts

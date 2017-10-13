@@ -6,7 +6,7 @@
     </head>
     <body>
     {% if session['loginStatus'] != False %}
-        <p>Logged in as ID: {{ session['loginStatus'] }} Name: {{ session['loginName'] }}</p>
+        <p>Logged in as {{ session['loginName'] }}</p>
     {% endif %}
     <form action="/logout" method="post">
         <input type="submit" value="Log Out">

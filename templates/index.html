@@ -3,9 +3,7 @@
 {% else %}
 <p>Not Logged In</p>
 {% endif %}
-<form action="/logout" method="post">
-  <input type="submit" value="Log Out">
-</form> 
+
 <br>
 {% with messages = get_flashed_messages() %}
 {% if messages %}

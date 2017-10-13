@@ -14,8 +14,9 @@ emailREGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 def formPage():
     if 'loginStatus' not in session:
         session['loginStatus'] = False
-    else:
-        pass
+    if 'loginName' not in session:
+        session['loginName'] = ''
+    
     return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
@@ -62,11 +63,13 @@ def userlogin():
     userInputData = {'email':email, 'password':hashedPassword}
     loginQuery = "SELECT * FROM users WHERE email = :email AND password = :password"
     currentUser = mysql.query_db(loginQuery, userInputData)
-    print currentUser
+    # print currentUser
     if currentUser:
         flash("Login Successful")
         session['loginStatus'] = currentUser[0]['id']
+        session['loginName'] = currentUser[0]['first_name']
         print session['loginStatus']
+        print session['loginName']
     else:
         flash("Password Entered Does Not Match Account")
     return redirect('/wall')
@@ -80,7 +83,7 @@ def userlogout():
 def wall():
     getPostsQuery = "SELECT * FROM messages"
     allPosts = mysql.query_db(getPostsQuery)
-    print allPosts
+    # print allPosts
     return render_template('wall.html', allPosts = allPosts)
 
 @app.route('/wallpost', methods=['POST'])

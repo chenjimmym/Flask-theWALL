@@ -5,6 +5,12 @@
         <meta charset="UTF-8">
     </head>
     <body>
+    {% if session['loginStatus'] == True %}
+    <p>Logged in as ID: {{ session['loginStatus'] }} Name: {{ session['loginName'] }}</p>
+    {% endif %}
+    <form action="/logout" method="post">
+        <input type="submit" value="Log Out">
+    </form> 
     <h1>The Coolest Wall: Welcome ---name--- </h1>
     <form action="/wallpost" method="post">
         <textarea name="postMessage" rows="10" cols="100"></textarea><br>

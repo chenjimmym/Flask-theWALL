@@ -12,8 +12,8 @@ emailREGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 @app.route('/')
 def formPage():
-    if 'loginStatus' not in session:
-        session['loginStatus'] = False
+    if 'loginID' not in session:
+        session['loginID'] = False
     if 'loginName' not in session:
         session['loginName'] = ''
     
@@ -66,9 +66,9 @@ def userlogin():
     # print currentUser
     if currentUser:
         # flash("Login Successful")
-        session['loginStatus'] = currentUser[0]['id']
+        session['loginID'] = currentUser[0]['id']
         session['loginName'] = currentUser[0]['first_name']
-        # print session['loginStatus']
+        # print session['loginID']
         # print session['loginName']
     else:
         flash("Password Entered Does Not Match Account")
@@ -77,7 +77,7 @@ def userlogin():
 
 @app.route('/logout', methods=['POST'])
 def userlogout():
-    session['loginStatus'] = False
+    session['loginID'] = False
     return redirect('/')
 
 @app.route('/wall')
@@ -94,7 +94,7 @@ def wall():
 @app.route('/wallpost', methods=['POST'])
 def wallpost():
     postMessage = request.form['postMessage']
-    inputMessageData = {'userID': session['loginStatus'],'message':postMessage}
+    inputMessageData = {'userID': session['loginID'],'message':postMessage}
     inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES (:userID, :message, NOW(), NOW());"
     mysql.query_db(inputMessageQuery,inputMessageData)
     return redirect('/wall')
@@ -103,7 +103,7 @@ def wallpost():
 def postcomment():
     commentMessage = request.form['commentMessage']
     messageID = request.form['msgID']
-    commentMessageData = {'postID':messageID, 'userID':session['loginStatus'], 'commentMessage':commentMessage}
+    commentMessageData = {'postID':messageID, 'userID':session['loginID'], 'commentMessage':commentMessage}
     commentInputQuery = "INSERT INTO `wallFlask`.`comments` (`message_id`, `user_id`, `comment`, `created_at`, `updated_at`) VALUES (:postID, :userID, :commentMessage, NOW(), NOW());"
     mysql.query_db(commentInputQuery,commentMessageData)
     return redirect('/wall')

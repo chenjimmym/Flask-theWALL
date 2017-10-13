@@ -99,7 +99,7 @@ def postcomment():
     commentMessage = request.form['commentMessage']
     messageID = request.form['msgID']
     commentMessageData = {'postID':messageID, 'userID':session['loginStatus'], 'commentMessage':commentMessage}
-    commentInputQuery = "INSERT INTO `wallFlask`.`comments` (`message_id`, `user_id`, `comment`, `created_at`, `updated_at`) VALUES (:postID, '3', :commentMessage, NOW(), NOW());"
+    commentInputQuery = "INSERT INTO `wallFlask`.`comments` (`message_id`, `user_id`, `comment`, `created_at`, `updated_at`) VALUES (:postID, :userID, :commentMessage, NOW(), NOW());"
     mysql.query_db(commentInputQuery,commentMessageData)
     return redirect('/wall')
 

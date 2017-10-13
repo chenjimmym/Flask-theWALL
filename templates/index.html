@@ -1,0 +1,47 @@
+{% if session['loginStatus'] == True %}
+<p>Logged In</p>
+{% else %}
+<p>Not Logged In</p>
+{% endif %}
+<form action="/logout" method="post">
+  <input type="submit" value="Log Out">
+</form> 
+<br>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  {% for message in messages %}
+    <p>{{message}}</p>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+<br>
+<h2>Registration</h2>
+<form action="/submit" method="post">
+    Email:
+    <input type="text" name="email">
+    <br>
+    First name:
+    <input type="text" name="firstName">
+    <br>
+    Last name:
+    <input type="text" name="lastName">
+    <br>
+    Password:
+    <input type="password" name="password">
+    <br>
+    Confirm Password:
+    <input type="password" name="passwordConfirm">
+    <br>
+    <input type="submit" value="Submit">
+</form> 
+<br>
+<h2>Login</h2>
+<form action="/login" method="post">
+  Email:
+  <input type="text" name="email">
+  <br>
+  Password:
+  <input type="password" name="password">
+  <br>
+  <input type="submit" value="Login">
+</form> 

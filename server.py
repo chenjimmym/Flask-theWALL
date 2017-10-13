@@ -78,6 +78,17 @@ def userlogout():
 
 @app.route('/wall')
 def wall():
-    return render_template('wall.html')
+    getPostsQuery = "SELECT * FROM messages"
+    allPosts = mysql.query_db(getPostsQuery)
+    print allPosts
+    return render_template('wall.html', allPosts = allPosts)
+
+@app.route('/wallpost', methods=['POST'])
+def wallpost():
+    postMessage = request.form['postMessage']
+    inputMessageData = {'message':postMessage}
+    inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES ('1', :message, NOW(), NOW());"
+    mysql.query_db(inputMessageQuery,inputMessageData)
+    return redirect('/wall')
 
 app.run(debug=True)

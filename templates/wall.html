@@ -7,8 +7,14 @@
     <body>
     <h1>The Coolest Wall: Welcome ---name--- </h1>
     <form action="/wallpost" method="post">
-        <textarea name="postMessage" rows="10" cols="50"></textarea>
+        <textarea name="postMessage" rows="10" cols="100"></textarea><br>
         <input type="submit" value="Post a message">
     </form>
+
+    {% for post in allPosts: %}
+    <p>{{ post['message'] }}</p>
+    {% endfor %}
+
+
     </body>
 </html>

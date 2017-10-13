@@ -68,8 +68,8 @@ def userlogin():
         flash("Login Successful")
         session['loginStatus'] = currentUser[0]['id']
         session['loginName'] = currentUser[0]['first_name']
-        print session['loginStatus']
-        print session['loginName']
+        # print session['loginStatus']
+        # print session['loginName']
     else:
         flash("Password Entered Does Not Match Account")
     return redirect('/wall')
@@ -81,16 +81,16 @@ def userlogout():
 
 @app.route('/wall')
 def wall():
-    getPostsQuery = "SELECT * FROM messages"
+    getPostsQuery = "SELECT first_name, message, users.id FROM users JOIN messages on user_id = users.id;"
     allPosts = mysql.query_db(getPostsQuery)
-    # print allPosts
+    print allPosts
     return render_template('wall.html', allPosts = allPosts)
 
 @app.route('/wallpost', methods=['POST'])
 def wallpost():
     postMessage = request.form['postMessage']
-    inputMessageData = {'message':postMessage}
-    inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES ('1', :message, NOW(), NOW());"
+    inputMessageData = {'userID': session['loginStatus'],'message':postMessage}
+    inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES (:userID, :message, NOW(), NOW());"
     mysql.query_db(inputMessageQuery,inputMessageData)
     return redirect('/wall')
 

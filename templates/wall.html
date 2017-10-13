@@ -18,7 +18,8 @@
     </form>
 
     {% for post in allPosts: %}
-    <p>{{ post['message'] }}</p>
+    <h4>ID:{{ post['id'] }} Name: {{ post['first_name'] }}</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
     {% endfor %}
 
 

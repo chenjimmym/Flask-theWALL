@@ -3,42 +3,58 @@
     <head>
         <title>The Wall</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+          crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wall.css') }}">
     </head>
     <body>
-    {% if session['loginID'] != False %}
-        <p>Logged in as {{ session['loginName'] }}</p>
-        <form action="/logout" method="post">
-            <input type="submit" value="Log Out">
-        </form> 
-        <h3>Search SubWall, if it does not exist, it will be created:</h3>
-        <form action="/searchSubWall" method="post">
-            <input type="text" name="subWall">
-            <input type="submit" value="Search">
-        </form> 
-        <h1>The Coolest Wall: {{ session['subWallName'] }}</h1>
-        <form action="/wallpost" method="post">
-            <textarea name="postMessage" rows="10" cols="100"></textarea><br>
-            <input type="submit" value="Post a message">
-        </form>
-        
-        {% for post in allPosts: %}
-        <h3>{{ post['first_name'] }} on {{ post['created_at'] }}</h3>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
-        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comments: </h5>
-        {% for comment in allComments: %}
-        {% if comment['message_id'] == post['msgID'] %}
-        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['first_name'] }} on {{ comment['created_at'] }}</h5>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['comment'] }}</p>
-        {% endif %}
-        {% endfor %}
-        <form action="/postcomment" method="post">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="commentMessage" rows="2" cols="50"></textarea><br>
-            <input type="hidden" name="msgID" value="{{ post['msgID'] }}">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Post a comment">
-        </form>
-        {% endfor %}
-        
-        
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6" id="left">
+                    {% if session['loginID'] != False %}
+                    <div id="loginStatus">
+                    <p>Logged in as {{ session['loginName'] }}</p>
+                    <form action="/logout" method="post">
+                        <input type="submit" value="Log Out">
+                    </form> 
+                    </div>
+                    <div id="wallSearch">
+                    <h4>Search SubWall, if it does not exist, it will be created:</h4>
+                    <form action="/searchSubWall" method="post">
+                        <input type="text" name="subWall">
+                        <input type="submit" value="Search">
+                    </form><br><br>
+                    <h3>The Coolest Wall: <span id="wallName">{{ session['subWallName'] }}</span></h3>
+                    <form action="/wallpost" method="post">
+                        <textarea name="postMessage" rows="5" cols="50"></textarea><br>
+                        <input type="submit" value="Post a message">
+                    </form>
+                    </div>
+                </div>
+                <div class="col-sm-6" id="right">
+                    {% for post in allPosts: %}
+                        <div id="postBlock">
+                            <h4>{{ post['first_name'] }} <span id="timeInfo1">on {{ post['created_at'] }}</span></h4>
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
+                            <div id="commentBox">
+                                {% for comment in allComments: %}
+                                {% if comment['message_id'] == post['msgID'] %}
+                                <h5>{{ comment['first_name'] }} <span id="timeInfo2">on {{ comment['created_at'] }}</span></h5>
+                                <p>{{ comment['comment'] }}</p>
+                                {% endif %}
+                                {% endfor %}
+                                <form action="/postcomment" method="post">
+                                    <textarea name="commentMessage" rows="1" cols="35"></textarea><br>
+                                    <input type="hidden" name="msgID" value="{{ post['msgID'] }}">
+                                    <input type="submit" value="Post a comment">
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
         {% endif %}
     </body>
     </html>

@@ -1,0 +1,33 @@
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: rgba(142, 232, 255, 0.692);
+}
+#loginStatus{
+    padding-top: 12px;
+}
+#wallSearch{
+    padding-top: 20px;
+}
+#wallName{
+    font-size: 45px;
+    font-style: italic;
+}
+#left{
+    ;
+}
+#right{
+    ;
+}
+#postBlock{
+    background-color: rgb(255, 238, 209);
+    margin-top: 12px;
+    padding: 8px;
+}
+#timeInfo1, #timeInfo2{
+    font-size: 10px;
+}
+#commentBox{
+    background-color: rgb(241, 241, 241);
+    margin-left: 25px;
+    padding: 8px;
+}

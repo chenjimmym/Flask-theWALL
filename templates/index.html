@@ -1,45 +1,61 @@
-{% if session['loginID'] == True %}
-<p>Logged In</p>
-{% else %}
-<p>Not Logged In</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
 
-<br>
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-  {% for message in messages %}
-    <p>{{message}}</p>
-  {% endfor %}
-{% endif %}
-{% endwith %}
-<br>
-<h2>Registration</h2>
-<form action="/submit" method="post">
-    Email:
-    <input type="text" name="email">
-    <br>
-    First name:
-    <input type="text" name="firstName">
-    <br>
-    Last name:
-    <input type="text" name="lastName">
-    <br>
-    Password:
-    <input type="password" name="password">
-    <br>
-    Confirm Password:
-    <input type="password" name="passwordConfirm">
-    <br>
-    <input type="submit" value="Submit">
-</form> 
-<br>
-<h2>Login</h2>
-<form action="/login" method="post">
-    Email:
-    <input type="text" name="email">
-    <br>
-    Password:
-    <input type="password" name="password">
-    <br>
-    <input type="submit" value="Login">
-</form> 
+<head>
+  <title>Super Reddit - Welcome</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+    crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+  <!-- <link href="css/style.css" rel="stylesheet"> -->
+</head>
+
+<body>
+  {% if session['loginID'] == True %}
+  <p>Logged In</p>
+  {% else %}
+  <p>Not Logged In</p>
+  {% endif %}
+
+  <br> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+  <p>{{message}}</p>
+  {% endfor %} {% endif %} {% endwith %}
+  <br>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-sm-4" id="registrationBox">
+        <h2>Registration</h2>
+        <form action="/submit" method="post">
+          Email:
+          <input type="text" name="email">
+          <br> First name:
+          <input type="text" name="firstName">
+          <br> Last name:
+          <input type="text" name="lastName">
+          <br> Password:
+          <input type="password" name="password">
+          <br> Confirm Password:
+          <input type="password" name="passwordConfirm">
+          <br>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+      <br>
+      <div class="col-sm-3" id="loginBox">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+          Email:
+          <input type="text" name="email">
+          <br> Password:
+          <input type="password" name="password">
+          <br>
+          <input type="submit" value="Login">
+        </form>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -106,8 +106,9 @@ def wall():
 @app.route('/wallpost', methods=['POST'])
 def wallpost():
     postMessage = request.form['postMessage']
-    inputMessageData = {'userID': session['loginID'],'message':postMessage}
-    inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES (:userID, :message, NOW(), NOW());"
+    inputMessageData = {'userID': session['loginID'],'message':postMessage,'subWallIDD':session['subWallID']}
+    inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`, `subwall_id`) VALUES (:userID, :message, NOW(), NOW(), :subWallIDD);"
+    # inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`, `subwall_id`) VALUES ('3', '3', 'NOW()', 'NOW()', '3');"
     mysql.query_db(inputMessageQuery,inputMessageData)
     return redirect('/wall')
 
@@ -125,6 +126,9 @@ def searchWall():
     else:
         subWallInsertQuery = "INSERT INTO `wallFlask`.`subwall` (`name`) VALUES (:searchTerm);"
         mysql.query_db(subWallInsertQuery,wallSearchInputData)
+        wallSearchQuery = "SELECT * FROM subwall WHERE subwall.name = :searchTerm;"
+        wallSearchResult = mysql.query_db(wallSearchQuery,wallSearchInputData)
+        session['subWallID'] = wallSearchResult[0]['id']
     return redirect('/wall')
 
 @app.route('/postcomment', methods=['POST'])

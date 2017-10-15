@@ -7,33 +7,38 @@
     <body>
     {% if session['loginID'] != False %}
         <p>Logged in as {{ session['loginName'] }}</p>
-    {% endif %}
-    <form action="/logout" method="post">
-        <input type="submit" value="Log Out">
-    </form> 
-    <h1>The Coolest Wall:</h1>
-    <form action="/wallpost" method="post">
-        <textarea name="postMessage" rows="10" cols="100"></textarea><br>
-        <input type="submit" value="Post a message">
-    </form>
-
-    {% for post in allPosts: %}
+        <form action="/logout" method="post">
+            <input type="submit" value="Log Out">
+        </form> 
+        <h3>Search SubWall, if it does not exist, it will be created:</h3>
+        <form action="/searchSubWall" method="post">
+            <input type="text" name="subWall">
+            <input type="submit" value="Search">
+        </form> 
+        <h1>The Coolest Wall: {{ session['subWallName'] }}</h1>
+        <form action="/wallpost" method="post">
+            <textarea name="postMessage" rows="10" cols="100"></textarea><br>
+            <input type="submit" value="Post a message">
+        </form>
+        
+        {% for post in allPosts: %}
         <h3>{{ post['first_name'] }} on {{ post['created_at'] }}</h3>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post['message'] }}</p>
         <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comments: </h5>
         {% for comment in allComments: %}
-            {% if comment['message_id'] == post['msgID'] %}
-                <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['first_name'] }} on {{ comment['created_at'] }}</h5>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['comment'] }}</p>
-            {% endif %}
+        {% if comment['message_id'] == post['msgID'] %}
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['first_name'] }} on {{ comment['created_at'] }}</h5>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ comment['comment'] }}</p>
+        {% endif %}
         {% endfor %}
         <form action="/postcomment" method="post">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="commentMessage" rows="2" cols="50"></textarea><br>
             <input type="hidden" name="msgID" value="{{ post['msgID'] }}">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Post a comment">
         </form>
-    {% endfor %}
-
-
+        {% endfor %}
+        
+        
+        {% endif %}
     </body>
-</html>
+    </html>

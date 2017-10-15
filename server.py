@@ -16,6 +16,10 @@ def formPage():
         session['loginID'] = False
     if 'loginName' not in session:
         session['loginName'] = ''
+    if 'subWallID' not in session:
+        session['subWallID'] = '1'
+    if 'subWallName' not in session:
+        session['subWallName'] = 'main'
     
     return render_template('index.html')
 
@@ -68,6 +72,7 @@ def userlogin():
         # flash("Login Successful")
         session['loginID'] = currentUser[0]['id']
         session['loginName'] = currentUser[0]['first_name']
+        session['subWallID'] = 1
         # print session['loginID']
         # print session['loginName']
     else:
@@ -82,13 +87,20 @@ def userlogout():
 
 @app.route('/wall')
 def wall():
-    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID, messages.created_at FROM users JOIN messages on user_id = users.id;"
-    allPosts = mysql.query_db(getPostsQuery)
+    print '@',session['subWallID']
+    getPostData = {'wallID':session['subWallID']}
+    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID, messages.created_at FROM users JOIN messages on user_id = users.id WHERE subwall_id = :wallID;"
+    allPosts = mysql.query_db(getPostsQuery, getPostData)
     # getCommentsQuery = "SELECT * FROM comments"
     getCommentsQuery = "SELECT message_id, user_id, comment, first_name, comments.created_at FROM users JOIN comments ON user_id = users.id ORDER BY comments.created_at;"
     allComments = mysql.query_db(getCommentsQuery)
     # print allComments
-    print allPosts
+    # print allPosts
+    getWallNameData = {'subWallID': session['subWallID']}
+    getWallNameQuery = "SELECT * FROM subwall WHERE subwall.id = :subWallID"
+    currentWallInfo = mysql.query_db(getWallNameQuery, getWallNameData)
+    print 'currentWallInfo', currentWallInfo
+    session['subWallName'] = currentWallInfo[0]['name']
     return render_template('wall.html', allPosts = allPosts, allComments = allComments)
 
 @app.route('/wallpost', methods=['POST'])
@@ -97,6 +109,22 @@ def wallpost():
     inputMessageData = {'userID': session['loginID'],'message':postMessage}
     inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`) VALUES (:userID, :message, NOW(), NOW());"
     mysql.query_db(inputMessageQuery,inputMessageData)
+    return redirect('/wall')
+
+@app.route('/searchSubWall', methods=['POST'])
+def searchWall():
+    wallSearchInput = request.form['subWall']
+    wallSearchInputData = {'searchTerm': wallSearchInput}
+    wallSearchQuery = "SELECT * FROM subwall WHERE subwall.name = :searchTerm;"
+    wallSearchResult = mysql.query_db(wallSearchQuery,wallSearchInputData)
+    print wallSearchResult
+    if wallSearchResult:
+        session['subWallID'] = wallSearchResult[0]['id']
+        print session['subWallID']
+        return redirect('/wall')
+    else:
+        subWallInsertQuery = "INSERT INTO `wallFlask`.`subwall` (`name`) VALUES (:searchTerm);"
+        mysql.query_db(subWallInsertQuery,wallSearchInputData)
     return redirect('/wall')
 
 @app.route('/postcomment', methods=['POST'])

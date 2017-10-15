@@ -108,7 +108,6 @@ def wallpost():
     postMessage = request.form['postMessage']
     inputMessageData = {'userID': session['loginID'],'message':postMessage,'subWallIDD':session['subWallID']}
     inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`, `subwall_id`) VALUES (:userID, :message, NOW(), NOW(), :subWallIDD);"
-    # inputMessageQuery = "INSERT INTO `wallFlask`.`messages` (`user_id`, `message`, `created_at`, `updated_at`, `subwall_id`) VALUES ('3', '3', 'NOW()', 'NOW()', '3');"
     mysql.query_db(inputMessageQuery,inputMessageData)
     return redirect('/wall')
 

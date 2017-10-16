@@ -89,10 +89,10 @@ def userlogout():
 def wall():
     print '@',session['subWallID']
     getPostData = {'wallID':session['subWallID']}
-    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID, messages.created_at FROM users JOIN messages on user_id = users.id WHERE subwall_id = :wallID ORDER BY messages.created_at;"
+    getPostsQuery = "SELECT first_name, message, users.id, messages.id AS msgID, messages.created_at FROM users JOIN messages on user_id = users.id WHERE subwall_id = :wallID ORDER BY messages.created_at DESC;"
     allPosts = mysql.query_db(getPostsQuery, getPostData)
     # getCommentsQuery = "SELECT * FROM comments"
-    getCommentsQuery = "SELECT message_id, user_id, comment, first_name, comments.created_at FROM users JOIN comments ON user_id = users.id ORDER BY comments.created_at;"
+    getCommentsQuery = "SELECT message_id, user_id, comment, first_name, comments.created_at FROM users JOIN comments ON user_id = users.id ORDER BY comments.created_at DESC;"
     allComments = mysql.query_db(getCommentsQuery)
     # print allComments
     # print allPosts
